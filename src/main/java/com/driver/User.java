@@ -1,15 +1,16 @@
 package com.driver;
 
+import java.util.HashSet;
+
 public class User {
      String name;
      String mobile;
 
-     public User(){
-
-     }
-    public User(String name,String mobile){
-        this.name=name;
-        this.mobile=mobile;
+    static HashSet < String > set ;
+    public User(String name, String mobile) {
+        new HashSet<>() ;
+        this.name = name ;
+        this.mobile = mobile ;
     }
 
     public String getName() {
