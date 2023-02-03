@@ -42,9 +42,15 @@ public class WhatsappRepository {
           //Throw "User is not a participant" if the user is not a part of the group
           //Change the admin of the group to "user" and return "SUCCESS". Note that at one time there is only one admin and the admin rights are transferred from approver to user.
 
-          if(!groupUserMap.containsKey(group)) throw new Exception("Group does not exist");
-          if(!adminMap.get(group).equals(approver)) throw new Exception("Approver does not have rights");
-          if(!this.userExistsInGroup(group, user)) throw  new Exception("User is not a participant");
+          if(!groupUserMap.containsKey(group)){
+               throw new Exception("Group does not exist");
+          }
+          if(!adminMap.get(group).equals(approver)) {
+               throw new Exception("Approver does not have rights");
+          }
+          if(!this.userExists(group, user)) {
+               throw  new Exception("User is not a participant");
+          }
 
           adminMap.put(group, user);
           return "SUCCESS";
@@ -89,8 +95,12 @@ public class WhatsappRepository {
           //If the message is sent successfully, return the final number of messages in that group.
 
 
-          if(!groupUserMap.containsKey(group)) throw new Exception("Group does not exist");
-          if(!this.userExistsInGroup(group, sender)) throw  new Exception("You are not allowed to send message");
+          if(!groupUserMap.containsKey(group)){
+               throw new Exception("Group does not exist");
+          }
+          if(!this.userExists(group, sender)){
+               throw  new Exception("You are not allowed to send message");
+          }
 
           List<Message> messages = new ArrayList<>();
           if(groupMessageMap.containsKey(group)) messages = groupMessageMap.get(group);
@@ -100,7 +110,7 @@ public class WhatsappRepository {
           return messages.size();
      }
 
-     public boolean userExistsInGroup(Group group, User sender) {
+     public boolean userExists(Group group, User sender) {
           List<User> users = groupUserMap.get(group);
           for(User user: users) {
                if(user.equals(sender)) return true;
@@ -114,9 +124,13 @@ public class WhatsappRepository {
           //If user is found in a group and it is the admin, throw "Cannot remove admin" exception
           //If user is not the admin, remove the user from the group, remove all its messages from all the databases, and update relevant attributes accordingly.
           //If user is removed successfully, return (the updated number of users in the group + the updated number of messages in group + the updated number of overall message.
-          if(!groupUserMap.containsValue(user)) throw new Exception("User not found");
+          if(!groupUserMap.containsValue(user)) {
+               throw new Exception("User not found");
+          }
           User admin=userData.get(0);
-          if(groupUserMap.containsValue(user) && userData.containsValue(admin)) throw new Exception("Cannot remove admin");
+          if(groupUserMap.containsValue(user) && userData.containsValue(admin)){
+               throw new Exception("Cannot remove admin");
+          }
           List<Message> messages = new ArrayList<>();
           if(groupMessageMap.containsValue(user)) messages = groupMessageMap.get(messages);
 
